@@ -1,6 +1,5 @@
-/* eslint-env mocha */
-import { isLoopbackAddr } from '../src/index.js'
-import { expect } from 'aegir/utils/chai.js'
+import { expect } from 'aegir/chai'
+import { isLoopbackAddr } from '../src/index.ts'
 
 const nonLoopbackIps = [
   '10.0.0.0',
