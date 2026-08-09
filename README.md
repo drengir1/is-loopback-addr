@@ -11,6 +11,10 @@
 
 Various Internet Engineering Task Force ([IETF](https://www.ietf.org/)) standards reserve the IPv4 address block `127.0.0.0/8` and the IPv6 address `::1/128` for this purpose. The most common IPv4 address used is 127.0.0.1. Commonly these loopback addresses are mapped to the hostnames, localhost or loopback. For more information check [rfc5735](https://tools.ietf.org/html/rfc5735) and [rfc3513](https://tools.ietf.org/html/rfc3513#section-2.4).
 
+This checks whether a **string is a loopback address literal**, per `127.0.0.0/8` and `::1/128`. It accepts any spelling the platform URL parser canonicalises into those ranges, which includes `127.1`, `2130706433`, `0x7f000001` and `0177.0.0.1`. Hostnames are never resolved: `localhost` is `false`, and `::ffff:127.0.0.1` is `false` because it is in neither range.
+
+**This is not an SSRF filter.** It classifies literals by RFC range. It does not know about DNS, redirects, IPv4-mapped addresses or any other route to the loopback interface, and it should not be the only check between untrusted input and an outbound request.
+
 ## Install
 
 ```sh
