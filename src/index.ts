@@ -2,18 +2,10 @@
  * Check if a given ip address is a loopback address
  */
 export function isLoopbackAddr (ip: string): boolean {
-  // Address literals are printable ASCII. Anything else is rejected before
-  // parsing: the URL parser strips ASCII whitespace and C0 controls (so
-  // '127.0.0\t.1' and '127.0.0.1 ' would normalise to loopback) and applies
-  // IDNA mapping (so '１２７.0.0.1' would too).
-  if (typeof ip !== 'string' || ip.length === 0 || /[^\x21-\x7e]/.test(ip)) {
-    return false
-  }
-
-  // URL delimiters must not be present at all: they terminate or relocate the
-  // host ('foo@127.0.0.1', '127.0.0.1/../x'), and ']' escapes the brackets
-  // added below. A bare trailing '/' or '\' is not part of an address either.
-  if (/[/\\?#@[\]]/.test(ip)) {
+  // An address literal is hex digits, dots and colons — nothing else. The URL
+  // parser normalises anything wider (percent-decoding, IDNA mapping, ASCII
+  // whitespace stripping) into a string that can look like a loopback quad.
+  if (typeof ip !== 'string' || !/^[0-9a-fA-FxX.:]+$/.test(ip)) {
     return false
   }
 
